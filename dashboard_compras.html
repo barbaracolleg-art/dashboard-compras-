@@ -52,6 +52,9 @@ tr:last-child td{border-bottom:none;}
 .tr-leads-conv td{background:#fff8ec;color:#b86e00;font-weight:500;}
 .tr-lead-origin td{background:#eef7f4;color:#0e7a57;font-weight:500;}
 .tr-lead-origin-pct td{background:#f9f9f9;color:#0e7a57;font-size:11px;}
+.tr-inv td{background:#fff8ec;color:#b86e00;font-weight:500;}
+.tr-inv-pct td{background:#fdf5e8;color:#b86e00;font-size:11px;}
+.tr-funnel-canal td{background:#eef4fb;color:#185FA5;font-weight:500;}
 </style>
 </head>
 <body>
@@ -174,6 +177,18 @@ const COMPRA_CON_LEAD_CAMPO={
   "2025-10":167,"2025-11":140,"2025-12":152,
   "2026-01":168,"2026-02":115,"2026-03":137,
   "2026-04":191,"2026-05":175
+};
+// Total compras inventario (todas las fuentes: VPP Nuevo+Usado, Funnel, Subasta, B2B, BUYBACK, CARFLEX, Test Car)
+const COMPRA_TOTAL_INV={
+  "2025-10":1614,"2025-11":1381,"2025-12":1484,
+  "2026-01":1328,"2026-02":1015,"2026-03":1349,
+  "2026-04":1846,"2026-05":1652
+};
+// Funnel + Funnel subasta (canal digital/web)
+const COMPRA_FUNNEL_CANAL={
+  "2025-10":397,"2025-11":327,"2025-12":383,
+  "2026-01":447,"2026-02":304,"2026-03":382,
+  "2026-04":450,"2026-05":457
 };
 
 const VPP_WEEKLY_DATA={
@@ -450,6 +465,10 @@ function render(){
   const totalConLead=conLeadArr?conLeadArr.reduce((a,b)=>a+b,0):null;
   const conLeadCampoArr=activeTab==='compra'?keys.map(k=>COMPRA_CON_LEAD_CAMPO[k]||0):null;
   const totalConLeadCampo=conLeadCampoArr?conLeadCampoArr.reduce((a,b)=>a+b,0):null;
+  const invArr=activeTab==='compra'?keys.map(k=>COMPRA_TOTAL_INV[k]||0):null;
+  const totalInv=invArr?invArr.reduce((a,b)=>a+b,0):null;
+  const funnelCanalArr=activeTab==='compra'?keys.map(k=>COMPRA_FUNNEL_CANAL[k]||0):null;
+  const totalFunnelCanal=funnelCanalArr?funnelCanalArr.reduce((a,b)=>a+b,0):null;
 
   const sqlArr=keys.map(k=>({k,r:pct(data[k].compradas,data[k].inspeccionadas)}));
   const mejor=sqlArr.length?sqlArr.reduce((b,x)=>x.r>b.r?x:b,sqlArr[0]):null;
@@ -467,6 +486,8 @@ function render(){
     ${activeTab==='compra'&&conLeadArr?`<div class="kpi" style="border-color:#0e7a57;"><div class="kpi-label">Compras desde Lead</div><div class="kpi-val" style="color:#0e7a57;font-size:32px;">${pct2(totalConLead,tb)}%</div><div class="kpi-sub">${totalConLead.toLocaleString()} campo+patente · ${totalConLeadCampo.toLocaleString()} solo campo</div></div>`:''}
     <div class="kpi"><div class="kpi-label">Mejor mes SQL</div><div class="kpi-val green">${mejor?mejor.r+'%':'-'}</div><div class="kpi-sub">${mejor?ml(mejor.k):'-'}</div></div>
     <div class="kpi"><div class="kpi-label">Peor mes SQL</div><div class="kpi-val red">${peor?peor.r+'%':'-'}</div><div class="kpi-sub">${peor?ml(peor.k):'-'}</div></div>
+    ${activeTab==='compra'&&totalInv?`<div class="kpi" style="border-color:#b86e00;"><div class="kpi-label">Total Compras (inventario)</div><div class="kpi-val" style="color:#b86e00;">${totalInv.toLocaleString()}</div><div class="kpi-sub">todas las fuentes · ${keys.length} meses</div></div>`:''}
+    ${activeTab==='compra'&&totalFunnelCanal?`<div class="kpi" style="border-color:#185FA5;"><div class="kpi-label">Funnel + Subasta</div><div class="kpi-val blue">${totalFunnelCanal.toLocaleString()}</div><div class="kpi-sub">${pct(totalFunnelCanal,totalInv)}% del total inventario</div></div>`:''}
   `;
 
   document.getElementById('chartLegend').innerHTML=`
@@ -518,6 +539,9 @@ function render(){
     ${activeTab==='compra'&&leadsArr?`<tr class="tr-leads-conv"><td>% Compras / Leads</td>${keys.map((k,i)=>`<td>${pct2(conLeadArr[i],leadsArr[i])}%</td>`).join('')}<td>${pct2(totalConLead,totalLeads)}%</td></tr>`:''}
     ${activeTab==='compra'&&conLeadArr?`<tr class="tr-lead-origin"><td>Compras desde Lead (campo+patente)</td>${conLeadArr.map(v=>`<td>${v.toLocaleString()}</td>`).join('')}<td>${totalConLead.toLocaleString()}</td></tr>`:''}
     ${activeTab==='compra'&&conLeadArr?`<tr class="tr-lead-origin-pct"><td>% Compras desde Lead</td>${keys.map((k,i)=>`<td>${pct2(conLeadArr[i],data[k].compradas)}%</td>`).join('')}<td>${pct2(totalConLead,tb)}%</td></tr>`:''}
+    ${activeTab==='compra'&&invArr?`<tr class="tr-inv"><td>Total Compras (inventario)</td>${invArr.map(v=>`<td>${v.toLocaleString()}</td>`).join('')}<td>${totalInv.toLocaleString()}</td></tr>`:''}
+    ${activeTab==='compra'&&funnelCanalArr?`<tr class="tr-funnel-canal"><td>Funnel + Subasta</td>${funnelCanalArr.map(v=>`<td>${v.toLocaleString()}</td>`).join('')}<td>${totalFunnelCanal.toLocaleString()}</td></tr>`:''}
+    ${activeTab==='compra'&&funnelCanalArr?`<tr class="tr-inv-pct"><td>% Funnel / Total inventario</td>${keys.map((k,i)=>`<td>${pct(funnelCanalArr[i],invArr[i])}%</td>`).join('')}<td>${pct(totalFunnelCanal,totalInv)}%</td></tr>`:''}
   `;
 }
 
