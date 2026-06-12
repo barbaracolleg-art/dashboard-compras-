@@ -484,7 +484,6 @@ function render(){
     ${activeTab==='compra'&&conLeadArr?`<div class="kpi" style="border-color:#0e7a57;"><div class="kpi-label">Compras desde Lead</div><div class="kpi-val" style="color:#0e7a57;font-size:32px;">${pct2(totalConLead,tb)}%</div><div class="kpi-sub">${totalConLead.toLocaleString()} campo+patente · ${totalConLeadCampo.toLocaleString()} solo campo</div></div>`:''}
     <div class="kpi"><div class="kpi-label">Mejor mes SQL</div><div class="kpi-val green">${mejor?mejor.r+'%':'-'}</div><div class="kpi-sub">${mejor?ml(mejor.k):'-'}</div></div>
     <div class="kpi"><div class="kpi-label">Peor mes SQL</div><div class="kpi-val red">${peor?peor.r+'%':'-'}</div><div class="kpi-sub">${peor?ml(peor.k):'-'}</div></div>
-    ${activeTab==='compra'&&totalInv?`<div class="kpi" style="border-color:#b86e00;"><div class="kpi-label">Total Compras (inventario)</div><div class="kpi-val" style="color:#b86e00;">${totalInv.toLocaleString()}</div><div class="kpi-sub">todas las fuentes · ${keys.length} meses</div></div>`:''}
     ${activeTab==='compra'&&totalFunnelCanal?`<div class="kpi" style="border-color:#185FA5;"><div class="kpi-label">Funnel + Subasta</div><div class="kpi-val blue">${totalFunnelCanal.toLocaleString()}</div><div class="kpi-sub">${pct(totalFunnelCanal,totalInv)}% del total inventario</div></div>`:''}
   `;
 
@@ -531,9 +530,7 @@ function render(){
     ${leadsRow}
     <tr><td style="font-weight:500">${lbl}</td>${keys.map(k=>`<td>${data[k].creadas.toLocaleString()}</td>`).join('')}<td style="font-weight:500">${tc.toLocaleString()}</td></tr>
     <tr><td style="font-weight:500">Inspeccionadas</td>${keys.map(k=>`<td>${data[k].inspeccionadas.toLocaleString()}</td>`).join('')}<td style="font-weight:500">${ti.toLocaleString()}</td></tr>
-    ${activeTab==='compra'&&invArr?`<tr class="tr-inv"><td>Total Compras (inventario)</td>${invArr.map(v=>`<td>${v.toLocaleString()}</td>`).join('')}<td>${totalInv.toLocaleString()}</td></tr>`:''}
     ${activeTab==='compra'&&funnelCanalArr?`<tr class="tr-funnel-canal"><td>Funnel + Subasta</td>${funnelCanalArr.map(v=>`<td>${v.toLocaleString()}</td>`).join('')}<td>${totalFunnelCanal.toLocaleString()}</td></tr>`:''}
-    ${activeTab==='compra'&&funnelCanalArr?`<tr class="tr-inv-pct"><td>% Funnel / Total inventario</td>${keys.map((k,i)=>`<td>${pct(funnelCanalArr[i],invArr[i])}%</td>`).join('')}<td>${pct(totalFunnelCanal,totalInv)}%</td></tr>`:''}
   `;
 }
 
