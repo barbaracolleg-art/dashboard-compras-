@@ -481,6 +481,7 @@ function render(){
     <div class="kpi"><div class="kpi-label">${lbl}</div><div class="kpi-val neutral">${tc.toLocaleString()}</div><div class="kpi-sub">${keys.length} meses</div></div>
     <div class="kpi"><div class="kpi-label">% Inspección</div><div class="kpi-val blue">${pct(ti,tc)}%</div><div class="kpi-sub">${ti.toLocaleString()} inspeccionadas</div></div>
     <div class="kpi"><div class="kpi-label">Conv. global</div><div class="kpi-val green">${pct(tb,ti)}%</div><div class="kpi-sub">inspeccionadas → comprada</div></div>
+    ${activeTab!=='compra'?`<div class="kpi"><div class="kpi-label">Compradas</div><div class="kpi-val neutral">${tb.toLocaleString()}</div><div class="kpi-sub">${pct(tb,ti)}% de inspeccionadas</div></div>`:''}
     ${activeTab==='compra'&&conLeadArr?`<div class="kpi" style="border-color:#0e7a57;"><div class="kpi-label">Compras desde Lead</div><div class="kpi-val" style="color:#0e7a57;font-size:32px;">${pct2(totalConLead,tb)}%</div><div class="kpi-sub">${totalConLead.toLocaleString()} campo+patente · ${totalConLeadCampo.toLocaleString()} solo campo</div></div>`:''}
     <div class="kpi"><div class="kpi-label">Mejor mes SQL</div><div class="kpi-val green">${mejor?mejor.r+'%':'-'}</div><div class="kpi-sub">${mejor?ml(mejor.k):'-'}</div></div>
     <div class="kpi"><div class="kpi-label">Peor mes SQL</div><div class="kpi-val red">${peor?peor.r+'%':'-'}</div><div class="kpi-sub">${peor?ml(peor.k):'-'}</div></div>
@@ -530,6 +531,9 @@ function render(){
     ${leadsRow}
     <tr><td style="font-weight:500">${lbl}</td>${keys.map(k=>`<td>${data[k].creadas.toLocaleString()}</td>`).join('')}<td style="font-weight:500">${tc.toLocaleString()}</td></tr>
     <tr><td style="font-weight:500">Inspeccionadas</td>${keys.map(k=>`<td>${data[k].inspeccionadas.toLocaleString()}</td>`).join('')}<td style="font-weight:500">${ti.toLocaleString()}</td></tr>
+    ${activeTab!=='compra'?`<tr><td style="font-weight:500">Compradas</td>${keys.map(k=>`<td>${data[k].compradas.toLocaleString()}</td>`).join('')}<td style="font-weight:500">${tb.toLocaleString()}</td></tr>`:''}
+    ${activeTab!=='compra'?`<tr class="tr-pct"><td>% Insp./oportunidades creadas</td>${keys.map(k=>`<td>${pct(data[k].inspeccionadas,data[k].creadas)}%</td>`).join('')}<td>${pct(ti,tc)}%</td></tr>`:''}
+    ${activeTab!=='compra'?`<tr class="tr-pct"><td>% Conv. compra</td>${keys.map(k=>`<td>${pct(data[k].compradas,data[k].inspeccionadas)}%</td>`).join('')}<td>${pct(tb,ti)}%</td></tr>`:''}
     ${activeTab==='compra'&&funnelCanalArr?`<tr class="tr-funnel-canal"><td>Funnel + Subasta</td>${funnelCanalArr.map(v=>`<td>${v.toLocaleString()}</td>`).join('')}<td>${totalFunnelCanal.toLocaleString()}</td></tr>`:''}
   `;
 }
