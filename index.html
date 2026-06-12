@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Compras Empresariales — Reportes</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0ede8;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:40px 20px;}
+h1{font-size:22px;font-weight:500;color:#111;}
+p{font-size:14px;color:#888;}
+.cards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+.card{background:#fff;border-radius:14px;padding:28px 32px;border:0.5px solid #ddd;text-decoration:none;color:inherit;transition:box-shadow .15s,transform .15s;min-width:220px;text-align:center;}
+.card:hover{box-shadow:0 4px 20px rgba(0,0,0,.10);transform:translateY(-2px);}
+.card-icon{font-size:32px;margin-bottom:12px;}
+.card-title{font-size:15px;font-weight:600;color:#111;margin-bottom:4px;}
+.card-sub{font-size:12px;color:#aaa;}
+</style>
+</head>
+<body>
+<div>
+  <h1>Compras Empresariales</h1>
+  <p style="margin-top:4px;">Panel ejecutivo · oct 2025 – jun 2026</p>
+</div>
+<div class="cards">
+  <a class="card" href="dashboard_compras.html">
+    <div class="card-icon">📊</div>
+    <div class="card-title">Dashboard de Compras</div>
+    <div class="card-sub">Compra · VPP · VPP Semanal</div>
+  </a>
+  <a class="card" href="funnel_compra.html">
+    <div class="card-icon">🔽</div>
+    <div class="card-title">Embudo de Compra</div>
+    <div class="card-sub">Funnel Clicar Web · Mayo vs 6M</div>
+  </a>
+</div>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Embudo de Compra — Clicar Web</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0ede8;min-height:100vh;}
+
+.top-bar{background:#111;color:#fff;padding:14px 28px;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.top-bar .brand{font-size:15px;font-weight:500;}
+.top-bar .sub{font-size:12px;color:#aaa;margin-top:2px;}
+.top-bar .badge{background:#1a7f5a;color:#fff;font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;white-space:nowrap;}
+
+.inner{padding:24px 28px;max-width:1100px;margin:0 auto;}
+
+/* Context banner */
+.context-banner{background:#fff;border-radius:12px;padding:14px 20px;margin-bottom:16px;border:0.5px solid #ddd;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.ctx-icon{font-size:24px;}
+.ctx-text{font-size:13px;color:#444;line-height:1.5;}
+.ctx-text strong{color:#111;}
+
+/* Two-column layout */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:700px){.compare-grid{grid-template-columns:1fr;}}
+
+.panel{background:#fff;border-radius:12px;padding:22px 24px;border:0.5px solid #ddd;}
+.panel.highlight{border-color:#185FA5;border-width:1.5px;}
+.panel-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+.panel-title{font-size:14px;font-weight:600;color:#111;}
+.panel-sub{font-size:11px;color:#aaa;margin-top:2px;}
+.panel-badge{font-size:11px;font-weight:600;padding:4px 10px;border-radius:10px;white-space:nowrap;}
+.badge-mayo{background:#eef4fb;color:#185FA5;}
+.badge-avg{background:#f5f5f5;color:#888;}
+
+/* Embudo */
+.embudo{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;}
+.emb-stage{width:100%;display:flex;flex-direction:column;align-items:center;}
+.emb-bar-wrap{width:100%;display:flex;justify-content:center;}
+.emb-bar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:54px;border-radius:6px;color:#fff;width:100%;box-sizing:border-box;}
+.emb-bar-left{display:flex;flex-direction:column;}
+.emb-bar-name{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;opacity:.8;margin-bottom:1px;}
+.emb-bar-count{font-size:21px;font-weight:500;line-height:1.15;}
+.emb-bar-right{text-align:right;}
+.emb-bar-conv{font-size:17px;font-weight:600;}
+.emb-bar-sub{font-size:10px;opacity:.75;}
+.emb-connector{display:flex;flex-direction:column;align-items:center;padding:5px 0 2px;gap:2px;}
+.emb-arrow{font-size:14px;color:#ccc;}
+.emb-conv-row{display:flex;align-items:center;gap:6px;}
+.emb-conv-pct{font-size:12px;font-weight:600;padding:2px 9px;border-radius:8px;}
+.emb-delta{font-size:11px;font-weight:600;padding:2px 7px;border-radius:8px;}
+.delta-up{background:#e6f7f2;color:#0e7a57;}
+.delta-dn{background:#fef0f0;color:#c0392b;}
+.delta-eq{background:#f5f5f5;color:#888;}
+.emb-lost{font-size:10px;color:#bbb;}
+
+/* Canal row */
+.emb-canal{margin-top:14px;padding:10px 14px;border-radius:8px;background:#fff8ec;border:1px solid #f0d090;display:flex;justify-content:space-between;align-items:center;}
+.emb-canal-label{font-size:10px;font-weight:700;color:#b86e00;text-transform:uppercase;letter-spacing:.06em;}
+.emb-canal-val{font-size:18px;font-weight:500;color:#b86e00;}
+.emb-canal-sub{font-size:10px;color:#b86e00;opacity:.7;}
+
+/* Summary table */
+.summary-card{background:#fff;border-radius:12px;padding:22px 24px;border:0.5px solid #ddd;margin-bottom:16px;}
+.summary-title{font-size:13px;font-weight:600;color:#111;margin-bottom:14px;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{padding:8px 12px;text-align:left;font-weight:500;color:#aaa;border-bottom:1px solid #eee;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.05em;}
+td{padding:8px 12px;border-bottom:0.5px solid #f2f2f2;color:#222;white-space:nowrap;}
+tr:last-child td{border-bottom:none;}
+td.val-mayo{font-weight:600;color:#185FA5;}
+td.val-avg{color:#888;}
+td.val-delta-up{font-weight:600;color:#0e7a57;}
+td.val-delta-dn{font-weight:600;color:#c0392b;}
+td.val-delta-eq{color:#aaa;}
+tr.tr-sep td{background:#fafafa;font-weight:600;color:#555;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding-top:10px;}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <div class="brand">Embudo de Compra — Canal Clicar Web</div>
+    <div class="sub">Leads originados en el sitio web de Clicar · origen lead = campo Cliente Potencial + cruce por patente</div>
+  </div>
+  <div class="badge">Mayo 2026 vs Promedio 6M</div>
+</div>
+
+<div class="inner">
+
+  <div class="context-banner">
+    <div class="ctx-icon">🌐</div>
+    <div class="ctx-text">
+      <strong>Fuente de leads:</strong> Sitio web Clicar — los leads se crean cuando un usuario ingresa su vehículo para tasación/compra a través del portal web.
+      Un lead se atribuye a una compra cuando el campo <em>Cliente Potencial</em> está completo, o cuando la patente del vehículo comprado coincide con una patente registrada en leads (con fecha de lead anterior a la oportunidad).
+    </div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="panel highlight" id="panelMayo"></div>
+    <div class="panel" id="panelProm"></div>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-title">Comparativa detallada — Mayo 2026 vs Promedio nov'25–abr'26</div>
+    <div style="overflow-x:auto;"><table id="summaryTable"></table></div>
+  </div>
+
+</div>
+
+<script>
+const LEADS_DATA={
+  "2025-10":27256,"2025-11":31333,"2025-12":20554,
+  "2026-01":31769,"2026-02":21498,"2026-03":26447,
+  "2026-04":24110,"2026-05":18183
+};
+const AGENDADOS_DATA={
+  "2025-10":2840,"2025-11":3395,"2025-12":2311,
+  "2026-01":3525,"2026-02":1977,"2026-03":2567,
+  "2026-04":2710,"2026-05":2649
+};
+const COMPRA_INSP_LEAD={
+  "2025-10":483,"2025-11":524,"2025-12":473,
+  "2026-01":576,"2026-02":413,"2026-03":489,
+  "2026-04":578,"2026-05":622
+};
+const COMPRA_CON_LEAD={
+  "2025-10":270,"2025-11":261,"2025-12":305,
+  "2026-01":335,"2026-02":230,"2026-03":294,
+  "2026-04":373,"2026-05":369
+};
+const COMPRA_FUNNEL_CANAL={
+  "2025-10":397,"2025-11":327,"2025-12":383,
+  "2026-01":447,"2026-02":304,"2026-03":382,
+  "2026-04":450,"2026-05":457
+};
+
+// Mayo 2026 values
+const MAYO = {
+  leads:  LEADS_DATA["2026-05"],
+  agend:  AGENDADOS_DATA["2026-05"],
+  insp:   COMPRA_INSP_LEAD["2026-05"],
+  comp:   COMPRA_CON_LEAD["2026-05"],
+  funnel: COMPRA_FUNNEL_CANAL["2026-05"]
+};
+
+// Promedio últimos 6 meses (nov 2025 – abr 2026)
+const AVG_KEYS = ["2025-11","2025-12","2026-01","2026-02","2026-03","2026-04"];
+function avg(obj){ return Math.round(AVG_KEYS.reduce((s,k)=>s+(obj[k]||0),0)/AVG_KEYS.length); }
+const PROM = {
+  leads:  avg(LEADS_DATA),
+  agend:  avg(AGENDADOS_DATA),
+  insp:   avg(COMPRA_INSP_LEAD),
+  comp:   avg(COMPRA_CON_LEAD),
+  funnel: avg(COMPRA_FUNNEL_CANAL)
+};
+
+function p2(n,d){ return d ? (n/d*100).toFixed(1) : '0.0'; }
+function pp(n,d){ return d ? (n/d*100).toFixed(2) : '0.00'; }
+
+// Delta helpers
+function deltaClass(mayo_rate, avg_rate){
+  const diff = parseFloat(mayo_rate) - parseFloat(avg_rate);
+  if(diff > 0.4) return 'delta-up';
+  if(diff < -0.4) return 'delta-dn';
+  return 'delta-eq';
+}
+function deltaLabel(mayo_rate, avg_rate){
+  const diff = (parseFloat(mayo_rate) - parseFloat(avg_rate)).toFixed(1);
+  return diff > 0 ? `▲ +${diff}pp` : diff < 0 ? `▼ ${diff}pp` : `= ${diff}pp`;
+}
+function deltaClassVol(mayo_val, avg_val){
+  return mayo_val > avg_val ? 'delta-up' : mayo_val < avg_val ? 'delta-dn' : 'delta-eq';
+}
+function deltaLabelVol(mayo_val, avg_val){
+  const diff = mayo_val - avg_val;
+  return diff > 0 ? `▲ +${diff.toLocaleString()}` : `▼ ${diff.toLocaleString()}`;
+}
+
+function buildFunnel(data, maxLeads, title, sub, badgeClass, badgeTxt, showDelta){
+  // maxLeads: for proportional bar sizing across both panels
+  const r = (val) => Math.max(14, val / maxLeads * 100);
+
+  function stageBar(val, conv, convLabel, color, name, avgConv){
+    const deltaHtml = showDelta && avgConv !== null
+      ? `<span class="emb-delta ${deltaClass(conv, avgConv)}">${deltaLabel(conv, avgConv)}</span>` : '';
+    return `
+      <div class="emb-stage">
+        <div class="emb-bar-wrap" style="width:${r(val)}%;">
+          <div class="emb-bar" style="background:${color};">
+            <div class="emb-bar-left">
+              <div class="emb-bar-name">${name}</div>
+              <div class="emb-bar-count">${val.toLocaleString()}</div>
+            </div>
+            <div class="emb-bar-right">
+              <div class="emb-bar-conv">${conv}%</div>
+              <div class="emb-bar-sub">${convLabel}</div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function connector(pct, dropped, avgPct){
+    const dHtml = showDelta && avgPct!==null
+      ? `<span class="emb-delta ${deltaClass(pct,avgPct)}">${deltaLabel(pct,avgPct)}</span>` : '';
+    return `
+      <div class="emb-connector">
+        <div class="emb-arrow">▼</div>
+        <div class="emb-conv-row">
+          <span class="emb-conv-pct" style="background:${pct>=15?'#e6f7f2':'#f5f5f5'};color:${pct>=15?'#0e7a57':'#888'};">${pct}% pasan</span>
+          ${dHtml}
+        </div>
+        <div class="emb-lost">−${dropped.toLocaleString()} no continúan</div>
+      </div>`;
+  }
+
+  const convAL = p2(data.agend, data.leads);
+  const convIA = p2(data.insp,  data.agend);
+  const convCI = p2(data.comp,  data.insp);
+  const convCL = pp(data.comp,  data.leads);
+
+  const avgConvAL = showDelta ? p2(PROM.agend, PROM.leads) : null;
+  const avgConvIA = showDelta ? p2(PROM.insp,  PROM.agend) : null;
+  const avgConvCI = showDelta ? p2(PROM.comp,  PROM.insp)  : null;
+
+  const html = `
+    <div class="panel-header">
+      <div>
+        <div class="panel-title">${title}</div>
+        <div class="panel-sub">${sub}</div>
+      </div>
+      <span class="panel-badge ${badgeClass}">${badgeTxt}</span>
+    </div>
+    <div class="embudo">
+      ${stageBar(data.leads, '100', 'del total', '#185FA5', 'Leads', null)}
+      ${connector(convAL, data.leads - data.agend, avgConvAL)}
+      ${stageBar(data.agend, convAL, 'de leads', '#8B5CF6', 'Agendados', null)}
+      ${connector(convIA, data.agend - data.insp, avgConvIA)}
+      ${stageBar(data.insp, convIA, 'de agendados', '#0e7a57', 'Inspeccionados', null)}
+      ${connector(convCI, data.insp - data.comp, avgConvCI)}
+      ${stageBar(data.comp, convCI, 'de inspeccionados', '#b86e00', 'Comprados', null)}
+      <div class="emb-canal">
+        <div>
+          <div class="emb-canal-label">Funnel canal (directo + subasta)</div>
+          <div class="emb-canal-sub">${pp(data.funnel, data.leads)}% de leads · ${p2(data.funnel, data.comp)}% vs comprados lead</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="emb-canal-val">${data.funnel.toLocaleString()}</div>
+        </div>
+      </div>
+    </div>`;
+  return html;
+}
+
+function render(){
+  const maxLeads = Math.max(MAYO.leads, PROM.leads);
+
+  document.getElementById('panelMayo').innerHTML = buildFunnel(
+    MAYO, maxLeads,
+    'Mayo 2026', 'Mes en análisis',
+    'badge-mayo', 'Mayo 2026', true
+  );
+
+  document.getElementById('panelProm').innerHTML = buildFunnel(
+    PROM, maxLeads,
+    'Promedio nov\'25 – abr\'26', 'Referencia: últimos 6 meses',
+    'badge-avg', 'Prom. 6M', false
+  );
+
+  // Summary table
+  const rows = [
+    { label:'Leads recibidos',      mayo:MAYO.leads,  prom:PROM.leads,  fmt:'vol' },
+    { label:'Agendados',            mayo:MAYO.agend,  prom:PROM.agend,  fmt:'vol' },
+    { label:'Inspeccionados (lead)',mayo:MAYO.insp,   prom:PROM.insp,   fmt:'vol' },
+    { label:'Comprados (lead)',     mayo:MAYO.comp,   prom:PROM.comp,   fmt:'vol' },
+    { label:'Total Funnel canal',   mayo:MAYO.funnel, prom:PROM.funnel, fmt:'vol' },
+    { label:'TASAS DE CONVERSIÓN',  sep:true },
+    { label:'% Agendados / Leads',        mayo:p2(MAYO.agend,MAYO.leads), prom:p2(PROM.agend,PROM.leads), fmt:'rate' },
+    { label:'% Inspeccionados / Agendados',mayo:p2(MAYO.insp,MAYO.agend),prom:p2(PROM.insp,PROM.agend),  fmt:'rate' },
+    { label:'% Comprados / Inspeccionados',mayo:p2(MAYO.comp,MAYO.insp), prom:p2(PROM.comp,PROM.insp),   fmt:'rate' },
+    { label:'% Compras desde Lead (vs leads)',mayo:pp(MAYO.comp,MAYO.leads),prom:pp(PROM.comp,PROM.leads),fmt:'rate' },
+  ];
+
+  const thead = `<thead><tr>
+    <th>Métrica</th>
+    <th style="color:#185FA5;">Mayo 2026</th>
+    <th>Prom. nov'25–abr'26</th>
+    <th>Diferencia</th>
+  </tr></thead>`;
+
+  const tbody = '<tbody>' + rows.map(r => {
+    if(r.sep) return `<tr class="tr-sep"><td colspan="4">${r.label}</td></tr>`;
+    const diff = r.fmt==='vol'
+      ? r.mayo - r.prom
+      : (parseFloat(r.mayo) - parseFloat(r.prom)).toFixed(1);
+    const cls = r.fmt==='vol'
+      ? (diff>0?'val-delta-up':diff<0?'val-delta-dn':'val-delta-eq')
+      : (parseFloat(diff)>0.4?'val-delta-up':parseFloat(diff)<-0.4?'val-delta-dn':'val-delta-eq');
+    const sign = diff > 0 ? '+' : '';
+    const suffix = r.fmt==='rate' ? '%' : '';
+    const diffFmt = r.fmt==='vol' ? `${sign}${Number(diff).toLocaleString()}` : `${sign}${diff}pp`;
+    return `<tr>
+      <td>${r.label}</td>
+      <td class="val-mayo">${r.mayo.toLocaleString()}${suffix}</td>
+      <td class="val-avg">${r.prom.toLocaleString()}${suffix}</td>
+      <td class="${cls}">${diffFmt}</td>
+    </tr>`;
+  }).join('') + '</tbody>';
+
+  document.getElementById('summaryTable').innerHTML = thead + tbody;
+}
+
+render();
+</script>
+</body>
+</html>
